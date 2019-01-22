@@ -13,16 +13,7 @@ const theme = createMuiTheme({
   },
   overrides: {
     MuiTypography: {
-      body2: {
-        fontSize: "19px",
-        lineHeight: 1.58,
-        fontWeight: 300,
-        marginTop: "30px"
-      },
-      h1: {
-        fontSize: "2rem",
-        fontWeight: 700
-      }
+      
     }
   },
   palette: {

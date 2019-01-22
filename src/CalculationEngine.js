@@ -44,24 +44,22 @@ CalculationEngine.prototype.lowRiskResults = function() {
 
 CalculationEngine.prototype.getChartData = function(risk) {
   let data = {};
-  if (risk === 0) {
+  if (risk === "0") {
     data = this.lowRiskResults();
-  } else if (risk === 1) {
+  } else if (risk === "1") {
     data = this.mediumRiskResults();
   } else {
     data = this.highRiskResults();
   }
   let formattedData = [];
-  data.invested.map((val, i) => {
+  for (let i = 0, len = data.invested.length; i < len; i++) {
     let myObj = {};
     myObj.month = i;
-    myObj.invested = val;
-    myObj.narrowBandUpper = data.narrowBandUpperLimit[i];
-    myObj.narrowBandLower = data.narrowBandLowerLimit[i];
-    myObj.wideBandLower = data.wideBandLowerLimit[i];
-    myObj.wideBandUpper = data.wideBandUpperLimit[i];
+    myObj.invested = data.invested[i];
+    myObj.narrowBand = [data.narrowBandUpperLimit[i], data.narrowBandLowerLimit[i]];
+    myObj.wideBand = [data.wideBandUpperLimit[i], data.wideBandLowerLimit[i]];
     formattedData.push(myObj);
-  });
+  }
 
   return formattedData;
 };

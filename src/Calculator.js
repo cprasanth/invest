@@ -1,22 +1,23 @@
 import React, { Component } from "react";
 import Calculation from "./CalculationEngine";
+import Chart from "./Chart";
+
 import {
   withStyles,
   Typography,
   TextField,
+  Radio,
+  FormControlLabel,
+  FormLabel,
+  RadioGroup,
+  FormControl,
+  InputLabel,
+  Input,
   Button,
   Grid,
-  Paper
+  Paper,
+  InputAdornment
 } from "@material-ui/core";
-import {
-  ComposedChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Area,
-  Line,
-  Tooltip
-} from "recharts";
 
 const styles = theme => ({
   paper: {
@@ -32,100 +33,96 @@ class Calculator extends Component {
     monthly: 100,
     timescale: 2,
     target: 5000,
-    risk: 2,
+    risk: "0",
     data: []
-  };  
-  redrawChart = () => {
-    let calcEngine = new Calculation(
-      this.state.initial,
-      this.state.monthly,
-      this.state.timescale
-    );
-    this.setState({data: calcEngine.getChartData(this.state.risk)});
+  };
+  updateChart = () => {
+    
+  }
+  componentDidMount(){
+    this.updateChart();
+  }
+  handleChange = prop => event => {
+    if(prop==="risk"){
+      this.setState({ [prop]: event.target.value });
+    }else{
+      this.setState({ [prop]: Number(event.target.value) });
+    }
+    console.log(this.state.initial,this.state.monthly,this.state.timescale, this.state.risk)
+    if (this.state.monthly > 0 && this.state.timescale > 0) {
+      let calcEngine = new Calculation(
+        this.state.initial,
+        this.state.monthly,
+        this.state.timescale
+      );
+      this.setState({ data: calcEngine.getChartData(this.state.risk) });
+      this.forceUpdate();
+    }
+
+
+
+    this.updateChart();
   };
   render() {
     const { classes } = this.props;
     return (
       <Paper className={classes.paper}>
         <Grid container spacing={0}>
-          <Grid item xs={12}>
-            {/* <Typography variant="h1" className={classes.title}>
-              Calculator
-            </Typography> */}
-            <Button onClick={this.redrawChart}>Calculate</Button>
-            <ComposedChart
-              width={600}
-              height={400}
-              data={this.state.data}
-              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />              
-              {/* <Area
-                type="monotone"
-                dataKey="narrowBandUpper"
-                stroke="#84c47f"
-                strokeWidth="0"
-                fill="#84c47f"
-                fillOpacity="1"
-              />
-              <Area
-                type="monotone"
-                dataKey="narrowBandLower"
-                stroke="#84c47f"
-                fill="#84c47f"
-                strokeWidth="0"
-                fillOpacity="1"
-              />
-              <Area
-                type="monotone"
-                dataKey="wideBandUpper"
-                stroke="#70cbef"
-                fill="#70cbef"
-                strokeWidth="0"
-                fillOpacity="1"
-              />
-              <Area
-                type="monotone"
-                dataKey="wideBandLower"
-                stroke="#70cbef"
-                fill="#70cbef"
-                strokeWidth="0"
-                fillOpacity="1"
-              /> */}
-              <Line
-                type="monotone"
-                dataKey="narrowBandUpper"
-                stroke="#84c47f"
-                strokeWidth="2"
-              />
-              <Line
-                type="monotone"
-                dataKey="narrowBandLower"
-                stroke="#84c47f"
-                strokeWidth="2"
-              />
-              <Line
-                type="monotone"
-                dataKey="wideBandUpper"
-                stroke="#70cbef"
-                strokeWidth="2"
-              />
-              <Line
-                type="monotone"
-                dataKey="wideBandLower"
-                stroke="#70cbef"
-                strokeWidth="2"
-              />
-              <Line
-                type="monotone"
-                dataKey="invested"
-                stroke="#ff0000"
-                strokeWidth="2"
-              />
-            </ComposedChart>
+          <Grid item sm={12} lg={6}>
+            <form>
+              <FormControl fullWidth className={classes.margin}>
+                <InputLabel htmlFor="initial">Lump Sum Investment</InputLabel>
+                <Input
+                  id="initial"
+                  value={this.state.initial}
+                  onChange={this.handleChange('initial')}
+                  startAdornment={<InputAdornment position="start">£</InputAdornment>}
+                />
+              </FormControl>
+              <FormControl fullWidth className={classes.margin}>
+                <InputLabel htmlFor="monthly">Monthly Investment</InputLabel>
+                <Input
+                  id="monthly"
+                  value={this.state.monthly}
+                  onChange={this.handleChange('monthly')}
+                  startAdornment={<InputAdornment position="start">£</InputAdornment>}
+                />
+              </FormControl>
+              <FormControl fullWidth className={classes.margin}>
+                <InputLabel htmlFor="target">Target Value</InputLabel>
+                <Input
+                  id="target"
+                  value={this.state.target}
+                  onChange={this.handleChange('target')}
+                  startAdornment={<InputAdornment position="start">£</InputAdornment>}
+                />
+              </FormControl>
+              <FormControl fullWidth className={classes.margin}>
+                <InputLabel htmlFor="timescale">Timescale (years)</InputLabel>
+                <Input
+                  id="timescale"
+                  value={this.state.timescale}
+                  onChange={this.handleChange('timescale')}
+                />
+              </FormControl>
+              <FormControl component="fieldset" className={classes.formControl}>
+                <FormLabel component="legend">Risk Level</FormLabel>
+                <RadioGroup
+                  aria-label="Risk Level"
+                  name="risk"
+                  className={classes.group}
+                  value={this.state.risk}
+                  onChange={this.handleChange('risk')}
+                >
+                  <FormControlLabel value="0" control={<Radio />} label="Low" />
+                  <FormControlLabel value="1" control={<Radio />} label="Medium" />
+                  <FormControlLabel value="2" control={<Radio />} label="High" />
+                </RadioGroup>
+              </FormControl>
+            </form>
+          </Grid>
+          <Grid item sm={12} lg={6}>
+            <Chart initial={this.state.initial} monthly={this.state.monthly} timescale={this.state.timescale} target={this.state.target}  target={this.state.target} risk={this.state.risk} />
           </Grid>
         </Grid>
       </Paper>
