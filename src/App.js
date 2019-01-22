@@ -1,28 +1,52 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Calculator from "./Calculator";
+import {
+  withStyles,
+  CssBaseline,
+  createMuiTheme,
+  MuiThemeProvider,
+} from "@material-ui/core";
 
-class App extends Component {
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
+  overrides: {
+    MuiTypography: {
+      body2: {
+        fontSize: "19px",
+        lineHeight: 1.58,
+        fontWeight: 300,
+        marginTop: "30px"
+      },
+      h1: {
+        fontSize: "2rem",
+        fontWeight: 700
+      }
+    }
+  },
+  palette: {
+    primary: {
+      main: "#488A99"
+    },
+    secondary: {
+      main: "#FAAE3D"
+    },
+    background: {
+      default: "#FFFFFF"
+    }
+  }
+});
+class App extends Component
+ {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />                
+        <Calculator />
+      </MuiThemeProvider>
     );
   }
 }
 
-export default App;
+export default withStyles(theme)(App);
