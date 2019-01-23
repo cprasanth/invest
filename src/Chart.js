@@ -24,13 +24,13 @@ const styles = theme => ({
 class Chart extends Component {
   
   render() {
-    const { classes, initial, monthly, timescale, risk, target } = this.props;
+    const { initial, monthly, timescale, risk, target } = this.props;
     const calcEngine = new Calculation(initial, monthly, timescale);
     const data = calcEngine.getChartData(risk);
 
     return (
       <ComposedChart
-        width={600}
+        width={550}
         height={400}
         data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
