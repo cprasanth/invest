@@ -41,7 +41,7 @@ class Calculator extends Component {
   state = {
     initial: 1000,
     monthly: 100,
-    timescale: 2,
+    timescale: 20,
     target: 5000,
     risk: "0",
     data: []
